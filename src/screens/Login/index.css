@@ -1,0 +1,21 @@
+.container-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.user-login {
+  padding: 0px 10px;
+  height: auto;
+  width: 400px;
+  border: 1.5px solid #cecece;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+h1 {
+  font-size: 3rem;
+}
