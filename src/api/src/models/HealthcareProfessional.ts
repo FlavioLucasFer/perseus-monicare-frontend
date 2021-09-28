@@ -1,15 +1,38 @@
-import HTTP from "../HTTP";
-import ResourceModel from "./ResourceModel";
+import EntityModel from "./EntityModel";
 
-class HealthcareProfessional extends ResourceModel {
-	private _id: number = 0;
-	private _name: string = '';
-	private _login: string = '';
-	private _email: string = '';
-	private _cpf: string = '';
-	private _phone: string = '';
+type ResponseData = {
+	id: number,
+	email: string,
+	user: {
+		name: string,
+		login: string,
+		cpf: string,
+		phone: string,
+	},
+};
 
-	constructor(id: number, name: string, login: string, email: string, cpf: string, phone: string) {
+class HealthcareProfessional extends EntityModel {
+	protected attributes = {
+		id: 0,
+		name: '',
+		login: '',
+		email: '',
+		cpf: '',
+		phone: '',
+		password: '',
+	};
+
+	protected static resourceRoute = 'healthcare-professionals';
+	protected resourceRoute = 'healthcare-professionals';
+
+	public constructor(attributes: object) {
+		const id = attributes['hpIdSec'] || 0;
+		const name = attributes['name'] || '';
+		const login = attributes['login'] || '';
+		const email = attributes['email'] || '';
+		const cpf = attributes['cpf'] || '';
+		const phone = attributes['phone'] || '';
+
 		super({
 			id,
 			name,
@@ -28,190 +51,77 @@ class HealthcareProfessional extends ResourceModel {
 	}
 
 	public get id(): number {
-		return this._id;
+		return this.attributes.id;
 	}
 
-	private set id(id: number) {
-		this._id = id;
+	private set id(value: number) {
+		this.attributes.id = value;
 	}
 
 	public get name(): string {
-		return this._name;
+		return this.attributes.name;
 	}
 
 	public set name(value: string) {
-		this._name = value;
+		this.attributes.name = value;
 	}
 
 	public get login(): string {
-		return this._login;
+		return this.attributes.login;
 	}
 
 	public set login(value: string) {
-		this._login = value;
+		this.attributes.login = value;
+	}
+
+	public set password(value: string) {
+		this.attributes.password = value;
 	}
 
 	public get email(): string {
-		return this._email;
+		return this.attributes.email;
 	}
 
 	public set email(value: string) {
-		this._email = value;
+		this.attributes.email = value;
 	}
 
 	public get cpf(): string {
-		return this._cpf;
+		return this.attributes.cpf;
 	}
 
 	public set cpf(value: string) {
-		this._cpf = value;
+		this.attributes.cpf = value;
 	}
 
 	public get phone(): string {
-		return this._phone;
+		return this.attributes.phone;
 	}
 
 	public set phone(value: string) {
-		this._phone = value;
+		this.attributes.phone = value;
 	}
 
-	private toObject(): object {
-		return {
-			id: this.id,
-			name: this.name,
-			login: this.login,
-			email: this.email,
-			cpf: this.cpf,
-			phone: this.phone,
-		};
-	}
-	
-	public static async all(): Promise<Array<HealthcareProfessional>|void> {
-		try {
-			const { data } = await HTTP.get('healthcare-professionals');
-
-			data.forEach((e: any, i: number) => {
-				data[i] = new HealthcareProfessional(
-					e.id,
-					e.user.name,
-					e.user.login,
-					e.email,
-					e.user.cpf,
-					e.user.phone,
-				);
-			});
-			
-			return data;
-		} catch (err) {
-			
-		}
+	protected static map = (data: ResponseData): HealthcareProfessional => {
+		return new HealthcareProfessional({
+			hpIdSec: data.id,
+			name: data.user.name,
+			login: data.user.login,
+			email: data.email,
+			cpf: data.user.cpf,
+			phone: data.user.phone,
+		});
 	}
 
-	public static async find(id: number): Promise<HealthcareProfessional> {
-		try {
-			const { data } = await HTTP.get(`healthcare-professionals/${id}`);
-
-			return new HealthcareProfessional(
-				data.id,
-				data.user.name,
-				data.user.login,
-				data.email,
-				data.user.cpf,
-				data.user.phone,
-			);
-		} catch (err) {
-			throw err;
-		}
-	}
-
-	public static async findAndUpdate(id: number, attributes: object): Promise<HealthcareProfessional> {
-		try {
-			const healthcareProfessional = await this.find(id);
-
-			for (const [key, value] of Object.entries(attributes)) 
-				healthcareProfessional[key] = value;
-			
-			return await healthcareProfessional.save();
-		} catch (err) {
-			throw err;
-		}
-	}
-
-	public static async create(
-		name: string, 
-		login: string, 
-		password: string, 
-		email: string, 
-		cpf: string, 
-		phone: string,
-	): Promise<HealthcareProfessional> {
-		try {
-			const body = {
-				name,
-				login,
-				password,
-				email,
-				cpf,
-				phone,
-			};
-
-			const { data } = await HTTP.post('healthcare-professionals', body);
-
-			return new HealthcareProfessional(
-				data.id,
-				data.user.name,
-				data.user.login,
-				data.email,
-				data.user.cpf,
-				data.user.phone,
-			);
-		} catch (err) {
-			throw err;
-		}
-	}
-
-	public static async delete(id: number) : Promise<boolean> {
-		try {
-			await HTTP.delete(`healthcare-professionals/${id}`);
-
-			return true;
-		} catch (err) {
-			throw err;
-		}
-	}
-
-	public async save(): Promise<HealthcareProfessional> {
-		try {
-			const { data } = await HTTP.put(
-				`healthcare-professionals/${this.id}`,
-				super.diff(this.toObject()),
-			);
-
-			return new HealthcareProfessional(
-				data.id,
-				data.user.name,
-				data.user.login,
-				data.email,
-				data.user.cpf,
-				data.user.phone,
-			);
-		} catch (err) {
-			throw err;
-		}
-	}
-
-	public async delete(): Promise<boolean> {
-		try {
-			await HTTP.delete(`healthcare-professionals/${this.id}`);
-
-			return true;
-		} catch (err) {
-			throw err;
-		}
-	}
-
-	public isDirty(): boolean {
-		return super.isDirty(this.toObject());
+	protected map = (data: ResponseData): HealthcareProfessional  => {
+		return new HealthcareProfessional({
+			hpIdSec: data.id,
+			name: data.user.name,
+			login: data.user.login,
+			email: data.email,
+			cpf: data.user.cpf,
+			phone: data.user.phone,
+		});
 	}
 }
 
