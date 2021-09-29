@@ -43,7 +43,7 @@ class Caregiver extends EntityModel {
 	protected static resourceRoute = 'caregivers';
 	protected resourceRoute = 'caregivers';
 
-	public constructor(attributes: object) {
+	public constructor(attributes: object = {}) {
 		const id = attributes['cgIdSec'] || 0;
 		const name = attributes['name'] || '';
 		const login = attributes['login'] || '';

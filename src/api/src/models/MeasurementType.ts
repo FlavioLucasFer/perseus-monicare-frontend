@@ -14,7 +14,7 @@ class MeasurementType extends EntityModel {
 	protected static resourceRoute = 'measurement-types';
 	protected resourceRoute = 'measurement-types';
 
-	public constructor(attributes: object) {
+	public constructor(attributes: object = {}) {
 		const id = attributes['mtIdSec'] || 0;
 		const name = attributes['name'] || '';
 
