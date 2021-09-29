@@ -25,7 +25,7 @@ class HealthcareProfessional extends EntityModel {
 	protected static resourceRoute = 'healthcare-professionals';
 	protected resourceRoute = 'healthcare-professionals';
 
-	public constructor(attributes: object) {
+	public constructor(attributes: object = {}) {
 		const id = attributes['hpIdSec'] || 0;
 		const name = attributes['name'] || '';
 		const login = attributes['login'] || '';

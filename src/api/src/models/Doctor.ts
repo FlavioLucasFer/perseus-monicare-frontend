@@ -29,7 +29,7 @@ class Doctor extends EntityModel {
 	protected static resourceRoute = 'doctors';
 	protected resourceRoute = 'doctors';
 
-	public constructor(attributes: object) {
+	public constructor(attributes: object = {}) {
 		const id = attributes['dcIdSec'] || 0;
 		const name = attributes['name'] || '';
 		const login = attributes['login'] || '';
