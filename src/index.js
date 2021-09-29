@@ -1,4 +1,6 @@
 import './index.css';
+import 'antd/dist/antd.css'
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -12,7 +14,7 @@ ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
       <App />
-    </React.StrictMode>,
+    </React.StrictMode>
   </Provider>,
   document.getElementById('root')
 );
