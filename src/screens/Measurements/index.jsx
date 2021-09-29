@@ -1,31 +1,75 @@
 import './index.css';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { Timeline, Tooltip } from 'antd';
 
-import React from 'react';
+import { Auth, Patient } from 'api';
 
-import { Timeline } from 'antd';
+const { Item } = Timeline;
 
 const Measurements = () => {
-  const measurements = [{
-    type: 'Teste',
-    value: 35.5,
-    measuredAt: '29/09/2021 00:00'
-  },
-  {
-    type: 'Teste',
-    value: 35.5,
-    measuredAt: '29/09/2021 00:00'
-  },
-  {
-    type: 'Teste',
-    value: 35.5,
-    measuredAt: '29/09/2021 00:00'
-  }, 
-  {
-    type: 'Teste',
-    value: 35.5,
-    measuredAt: '29/09/2021 00:00'
-  }
-  ];
+	const [patient, setPatient] = useState(new Patient());
+
+	useEffect(async () => {
+		try {
+			await Auth.login('crkmkjlknnrllçloooop', 'abcdefgh19');
+
+			const patient = await Patient.find(13);
+			await patient.allMeasurements();
+			
+			setPatient(patient);
+		} catch (err) {
+			console.log('err:', err);
+		}
+	}, []);
+
+	function renderTimeLine(e) {
+		const {
+			value,
+			measuredAt,
+			status,
+			measurementType,
+		} = e;
+
+		let color = '#33f587';
+		let dotTooltip = 'Tudo bem!';
+
+		switch (status) {
+			case 'bad':
+				color = '#f53933';
+				dotTooltip = 'Perigoso!'
+				break;
+				
+				case 'caution':
+					color = '#ffcc00';
+					dotTooltip = 'Cuidado!'
+				break;
+		}
+
+		const Dot = styled.div`
+			height: 15px;
+			width: 15px;
+			background-color: transparent;
+			border: 3px solid ${color};
+			border-radius: 50%;
+		`;
+
+		const Value = styled.span`
+			color: ${status === 'bad' ? color : '#000'};
+		`;
+		return (
+			<Item label={<span className="fs-6"><b>{measurementType.name}</b></span>}
+				dot={
+					<Tooltip title={dotTooltip}>
+						<Dot />
+					</Tooltip>
+				}>
+				<Value className={`fs-5 ${status === 'bad' && 'fw-bold'}`}> {value} </Value>
+				<br />
+				<small> <b> Medido em: </b> {measuredAt} </small>
+			</Item>
+		);
+	}
 
   return (
     <div className='container'>
@@ -33,15 +77,7 @@ const Measurements = () => {
         <div className='row'>
           <div className='col-sm-6'>
             <Timeline mode='left'> 
-              {measurements.map(e => (
-                <Timeline.Item label={e.type}
-                  color='green'>
-                  <p> {e.value} </p>
-
-                  <span> <b> Medido em: </b> {e.measuredAt} </span>
-                </Timeline.Item>
-                // <MeasurementStatus />
-              ))}
+              {patient.measurements.map(renderTimeLine)}
             </Timeline>
           </div>
         </div>
