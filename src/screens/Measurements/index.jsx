@@ -1,10 +1,8 @@
-import './Measurements.css';
+import './index.css';
 
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Timeline } from 'antd';
-
-import MeasurementStatus from 'components/MeasurementStatus';
 
 const Measurements = () => {
   const measurements = [{

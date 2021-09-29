@@ -1,4 +1,4 @@
-import './Login.css';
+import './index.css';
 
 import { useState } from 'react';
 
