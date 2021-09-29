@@ -1,5 +1,3 @@
-'use strict';
-
 import { configureStore } from '@reduxjs/toolkit';
 
 import userReducer from 'redux/reducers/user';

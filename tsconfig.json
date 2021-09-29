@@ -4,7 +4,7 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "target": "esNext",
-    "jsx": "react",
+    "jsx": "react-jsx",
     "types": [
       "react"
     ],
