@@ -1,7 +1,7 @@
 import 'materialize-css';
 import './index.css';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router';
 
 import Input from 'components/Input.jsx';
@@ -14,7 +14,7 @@ function initialState() {
 }
 
 const UserLogin = () => {
-  let [ values, setValues ] = useState(initialState);
+  const [ values, setValues ] = useState(initialState);
 
   let history = useHistory();
 
