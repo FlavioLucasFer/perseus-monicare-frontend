@@ -19,7 +19,7 @@ function App() {
 					<Layout style={{ padding: '0 24px 24px' }}>
 						<Breadcrumb style={{ margin: '16px 0' }}>
 							<Breadcrumb.Item>Home</Breadcrumb.Item>
-							<Breadcrumb.Item>Pacients</Breadcrumb.Item>
+							<Breadcrumb.Item>Pacientes</Breadcrumb.Item>
 							<Breadcrumb.Item>Medições do paciente</Breadcrumb.Item>
 						</Breadcrumb>
 						<Content className="site-layout-background"

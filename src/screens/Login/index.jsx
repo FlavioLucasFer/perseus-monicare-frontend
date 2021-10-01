@@ -1,70 +1,64 @@
 import './index.css';
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 
-function initialState() {
-  return { 
-    username: '', 
-    password: '' 
-  };
-}
+import { Formik } from 'formik';
+import { Field } from 'formik-antd'
+import { Form, Input, Button, Checkbox } from 'antd';
+
+import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, UserOutlined } from '@ant-design/icons';
+
+import { useHistory } from 'react-router';
+
 
 const UserLogin = () => {
-  const [ values, setValues ] = useState(initialState);
+  const history = useHistory();
 
-  let history = useHistory();
+  function initialState() {
+    return {
+      username: '',
+      password: ''
+    };
+  }
 
   return (
     <div className='container-login'>
-      <div className='user-login'>
-        <div className='row'>
-          <h1> Acesse o sistema </h1>
-        </div>
+      <h1> MoniCare </h1>
 
-        <div className='row'>
-          <input placeholder='username' />
-          {/* <Input label='Usuário'
-            id='user'
-            name='user'
-            type='text'
-            icon='person'
-            value={values.user}
-            onChange={(e) => {
-              setValues({
-                ...values,
-                user: e.target.value
-              });
-            }} /> */}
-        </div>
+      <div className='user-login border-0'>
+        <Formik initialValues={initialState}>
+          {(values) => {
+            return (
+              <Form>
+                <Form.Item name='username'>
 
-        <div className='row'>
-          <input name='password' />
-          {/* <Input label='Senha'
-            id='password'
-            name='password'
-            type='password'
-            icon='lock'
-            value={values.password}
-            onChange={(e) => {
-              setValues({
-                ...values,
-                password: e.target.value
-              });
-            }} /> */}
-        </div>
+                  <Input placeholder='Login'
+                    size='large'
+                    prefix={<UserOutlined />} />
+                </Form.Item>
 
-        <div className='row'>
-          <button type='submit' 
-            name='action'
-            onClick={() => {
-              history.push('/');
-            }}>
-              Login
-          </button>
-        </div>
+                <Form.Item name='password'>
+                  <Input.Password placeholder='Senha'
+                    size='large'
+                    prefix={<LockOutlined />}
+                    iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                  />
+                </Form.Item>
+
+                <Form.Item>
+                  <Button type='primary'
+                    onClick={() => {
+                      history.push('/');
+                    }}>
+                    Entrar
+                  </Button>
+                </Form.Item>
+              </Form>
+            );
+          }}
+        </Formik>
       </div>
     </div>
   );
 }
 
-export default UserLogin;  
+export default UserLogin;
