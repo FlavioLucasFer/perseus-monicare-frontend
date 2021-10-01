@@ -1,8 +1,6 @@
 import './index.css';
-
 import { useState } from 'react';
-
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 
 function initialState() {
   return { 

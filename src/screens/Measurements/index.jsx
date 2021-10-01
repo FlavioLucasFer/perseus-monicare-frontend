@@ -1,20 +1,25 @@
 import './index.css';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Timeline, Tooltip } from 'antd';
+import { Button, Timeline, Tooltip, Typography } from 'antd';
+
+import OxigenacaoImg from './oxigenacao.jpg';
+import TemperaturaImg from './temperatura.jpg';
 
 import { Auth, Patient } from 'api';
 
 const { Item } = Timeline;
+const { Title } = Typography;
 
-const Measurements = () => {
+function Measurements() {
 	const [patient, setPatient] = useState(new Patient());
+	const [tab, setTab] = useState('timeline');
 
 	useEffect(async () => {
 		try {
-			await Auth.login('crkmkjlknnrllçloooop', 'abcdefgh19');
+			await Auth.login('ami', '1234568a9');
 
-			const patient = await Patient.find(3);
+			const patient = await Patient.find(2);
 
 			await patient.allMeasurements();
 
@@ -24,7 +29,7 @@ const Measurements = () => {
 		}
 	}, []);
 
-	function renderTimeLine(e) {
+	function renderTimeLineItem(e) {
 		const {
 			id,
 			value,
@@ -61,7 +66,8 @@ const Measurements = () => {
 		`;
 
 		return (
-			<Item key={id} 
+			<Item className="mt-2 mb-2"
+				key={id} 
 				label={<span className="fs-6"><b>{measurementType.name}</b></span>}
 				dot={
 					<Tooltip title={dotTooltip}>
@@ -75,15 +81,68 @@ const Measurements = () => {
 		);
 	}
 
-  return (
-    <div className='container'>
-      <div className='col-sm-12'>
-				<Timeline mode='left'> 
-					{patient.measurements.map(renderTimeLine)}
-				</Timeline>
-      </div>
-    </div>
-  );
+	function renderTimeLine() {
+		return (
+			<Timeline mode='left'
+				reverse
+				style={{ 
+					overflowY: 'auto', 
+					overflowX: 'hidden',
+					height: '100%',
+				}}>
+				{patient.measurements.map(renderTimeLineItem)}
+			</Timeline>
+		);
+	}
+
+	function renderCharts() {
+		return (
+			<div className="d-flex justify-content-evenly">
+				<img src={TemperaturaImg} />
+				<img src={OxigenacaoImg} />
+			</div>
+		);
+	}
+
+	function handleTabButtonClick(tab) {
+		setTab(tab);
+	}
+
+	return (
+		<div className='container' style={{ height: '100%' }}>
+			<div className='col-sm-12' style={{ height: '100%' }}>
+				<Title className="text-center mb-2"
+					level={2}>
+					{patient.name}
+				</Title>
+
+				<div className="row justify-content-center mb-4">
+					<div className="col-sm-1">
+						<Button type="primary"
+							disabled={tab === 'timeline'}
+							onClick={handleTabButtonClick.bind(null, 'timeline')}>
+							Timeline
+						</Button>
+					</div>
+					<div className="col-sm-1">
+						<Button type="primary"
+							disabled={tab === 'charts'}
+							onClick={handleTabButtonClick.bind(null, 'charts')}>
+							Gráficos
+						</Button>
+					</div>
+				</div>
+
+				<div style={{ height: '85%' }}>
+					{tab === 'timeline' ?
+						renderTimeLine()
+					: 
+						renderCharts()
+					}
+				</div>
+			</div>
+		</div>
+	);
 }
 
 export default Measurements;
