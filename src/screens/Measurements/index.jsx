@@ -14,9 +14,10 @@ const Measurements = () => {
 		try {
 			await Auth.login('crkmkjlknnrllçloooop', 'abcdefgh19');
 
-			const patient = await Patient.find(13);
+			const patient = await Patient.find(3);
+
 			await patient.allMeasurements();
-			
+
 			setPatient(patient);
 		} catch (err) {
 			console.log('err:', err);
@@ -25,6 +26,7 @@ const Measurements = () => {
 
 	function renderTimeLine(e) {
 		const {
+			id,
 			value,
 			measuredAt,
 			status,
@@ -57,8 +59,10 @@ const Measurements = () => {
 		const Value = styled.span`
 			color: ${status === 'bad' ? color : '#000'};
 		`;
+
 		return (
-			<Item label={<span className="fs-6"><b>{measurementType.name}</b></span>}
+			<Item key={id} 
+				label={<span className="fs-6"><b>{measurementType.name}</b></span>}
 				dot={
 					<Tooltip title={dotTooltip}>
 						<Dot />
@@ -74,13 +78,9 @@ const Measurements = () => {
   return (
     <div className='container'>
       <div className='col-sm-12'>
-        <div className='row'>
-          <div className='col-sm-6'>
-            <Timeline mode='left'> 
-              {patient.measurements.map(renderTimeLine)}
-            </Timeline>
-          </div>
-        </div>
+				<Timeline mode='left'> 
+					{patient.measurements.map(renderTimeLine)}
+				</Timeline>
       </div>
     </div>
   );

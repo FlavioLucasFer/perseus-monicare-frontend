@@ -1,8 +1,13 @@
 import Routes from './Routes';
 
+import Navbar from 'components/Navbar';
+
 function App() {
   return (
-    <Routes />
+    <div>
+      <Routes />
+      {/* <Navbar /> */}
+    </div>
   );
 }
 
